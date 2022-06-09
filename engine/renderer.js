@@ -1,9 +1,9 @@
-import { appCanvas, windowWidth, windowHeight, pixelRatio } from "./consts";
+import { consts } from "./consts";
 import { WebGLRenderer } from "three";
 
-const renderer  = new WebGLRenderer( { canvas: appCanvas } );
+const renderer  = new WebGLRenderer( { canvas: consts.appCanvas } );
 
-renderer.setPixelRatio( pixelRatio );
-renderer.setSize( windowWidth, windowHeight );
+renderer.setPixelRatio( consts.pixelRatio );
+renderer.setSize( consts.windowWidth, consts.windowHeight );
 
 export { renderer };

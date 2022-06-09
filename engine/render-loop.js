@@ -1,7 +1,8 @@
 import { scene } from "./scene";
 import { camera } from "./camera";
 import { renderer} from "./renderer";
-import { controls, moves } from './controls';
+import { controls, moves, debug } from './controls';
+import { consts } from './consts';
 
 //---- RENDER ----\\
 animate();
@@ -20,6 +21,14 @@ function animate() {
     if ( moves.down )   controls.moveForward(-1);
     if ( moves.right )  controls.moveRight(1);
     if ( moves.left )   controls.moveRight(-1);
+
+    // Camera coordinates
+    if (debug) consts.debugInfo.innerHTML = `
+        <li>CameraX : ${ camera.position.x }</li>
+        <li>CameraY : ${ camera.position.y }</li>
+        <li>CameraZ : ${ camera.position.z }</li>
+    `;
+    else consts.debugInfo.innerHTML = '';
 
     // Render
     renderer.render( scene, camera );
