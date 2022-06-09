@@ -14,7 +14,7 @@ function animate() {
     }, 1000 / 30 );
 
     // Controls
-    // controls.lock();
+    if ( document.hasFocus() ) controls.lock(); // Lock la souris pour la navigation FPS
 
     if ( moves.up )     controls.moveForward(1);
     if ( moves.down )   controls.moveForward(-1);
