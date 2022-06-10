@@ -7,12 +7,6 @@ import { controls } from './engine/controls';
 import { helpers } from './engine/helpers';
 import { animate } from './engine/render-loop';
 
-const torus = new THREE.Mesh(
-    new THREE.TorusGeometry( 30, 3, 16, 100 ),
-    new THREE.MeshStandardMaterial( { color: 0xffffff } )
-);
-scene.add(torus);
-
 // Background
 scene.background = textures.space;
 
