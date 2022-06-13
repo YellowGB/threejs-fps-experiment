@@ -2,11 +2,14 @@ import { scene } from "./scene";
 import { camera } from "./camera";
 import { renderer} from "./renderer";
 import { controls, moves, debug } from "./controls";
-import { helpers } from "./helpers";
+import { helpers, boundingBoxHelper } from "./helpers";
 import { consts } from "./consts";
 import { skybox } from "../designer/skybox";
+import { player, playerBB } from '../designer/player';
+import { boundingBoxes } from '../designer/environment';
 
-let speed = 10;
+let speed = 2;
+const playerHelper = boundingBoxHelper( playerBB, false );
 
 export function animate() {
 
@@ -15,13 +18,29 @@ export function animate() {
         requestAnimationFrame( animate );
     }, 1000 / 30 );
 
-    // Controls
-    if ( document.hasFocus() ) controls.lock(); // Lock la souris pour la navigation FPS
+    // Lock la souris pour la navigation FPS
+    if ( document.hasFocus() ) controls.lock();
 
-    if ( moves.up )     controls.moveForward(speed);
-    if ( moves.down )   controls.moveForward(-speed);
-    if ( moves.right )  controls.moveRight(speed);
-    if ( moves.left )   controls.moveRight(-speed);
+    // Controls
+    if ( moves.up )     controls.moveForward( speed );
+    if ( moves.down )   controls.moveForward( -speed );
+    if ( moves.right )  controls.moveRight( speed );
+    if ( moves.left )   controls.moveRight( -speed );
+
+    // Update player position and bounding box
+    player.position.x = camera.position.x;
+    player.position.z = camera.position.z;
+    playerBB.copy( player.geometry.boundingBox ).applyMatrix4( player.matrixWorld );
+
+    // Collisions
+    boundingBoxes.forEach( (bb) => {
+        if ( playerBB.intersectsBox( bb ) ) {
+            if ( moves.up )     controls.moveForward( -speed );
+            if ( moves.down )   controls.moveForward( speed );
+            if ( moves.right )  controls.moveRight( -speed );
+            if ( moves.left )   controls.moveRight( speed );
+        }
+    })
 
     // Camera coordinates
     if (debug) {
@@ -31,11 +50,11 @@ export function animate() {
             <li>CameraY : ${ camera.position.y }</li>
             <li>CameraZ : ${ camera.position.z }</li>
         `;
-        scene.add( helpers.axes );
+        scene.add( helpers.axes, playerHelper );
     }
     else {
         consts.debugInfo.innerHTML = '';
-        scene.remove( helpers.axes );
+        scene.remove( helpers.axes, playerHelper );
     }
 
     // Rotation lente de la skybox pour donner un peu de vie aux nuages

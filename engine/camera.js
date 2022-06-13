@@ -8,7 +8,7 @@ const far    = 10000;
 
 const camera = new PerspectiveCamera( fov, aspect, near, far );
 
-camera.position.set( 0, 15, 90 )
+camera.position.set( 0, 20, 90 )
 camera.lookAt( 0, 0, 0 );
 
 export { camera };
