@@ -40,10 +40,10 @@ export function animate() {
             if ( moves.right )  controls.moveRight( -speed );
             if ( moves.left )   controls.moveRight( speed );
         }
-    })
+    });
 
     // Camera coordinates
-    if (debug) {
+    if ( debug ) {
         consts.debugInfo.innerHTML = `
             <li>Speed : ${ speed }</li>
             <li>CameraX : ${ camera.position.x }</li>

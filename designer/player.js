@@ -10,7 +10,6 @@ const player = new Mesh(
     new MeshBasicMaterial( { color: 0x0000ff } )
 );
 player.position.y = playerHeight / 2;
-
 let playerBB = setBoundingBox( player );
 
 export { player, playerBB };
