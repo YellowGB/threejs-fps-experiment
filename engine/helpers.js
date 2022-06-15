@@ -17,8 +17,8 @@ helpers.grid    = gridHelper;
 
 export { helpers };
 
-export function boundingBoxHelper( boundingBox, add = true ) {
-    const box3Helper = new Box3Helper( boundingBox, 0x00ff00 );
+export function boundingBoxHelper( boundingBox, add = true, color = 0x00ff00 ) {
+    const box3Helper = new Box3Helper( boundingBox, color );
     box3Helper.material.linewidth = 3;
     if ( ! add ) return box3Helper;
     scene.add( box3Helper );

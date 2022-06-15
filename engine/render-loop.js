@@ -5,11 +5,13 @@ import { controls, moves, debug } from "./controls";
 import { helpers, boundingBoxHelper } from "./helpers";
 import { consts } from "./consts";
 import { skybox } from "../designer/skybox";
-import { player, playerBB } from '../designer/player';
+import { player, playerBB, interactBox, interactBB } from '../designer/player';
 import { boundingBoxes } from '../designer/environment';
+import { interactableBBoxes } from '../designer/interactable';
 
-let speed = 2;
-const playerHelper = boundingBoxHelper( playerBB, false );
+let speed               = 2;
+const playerHelper      = boundingBoxHelper( playerBB, false );
+const interactHelper   = boundingBoxHelper( interactBB, false, 0x12ffcc );
 
 export function animate() {
 
@@ -28,9 +30,10 @@ export function animate() {
     if ( moves.left )   controls.moveRight( -speed );
 
     // Update player position and bounding box
-    player.position.x = camera.position.x;
-    player.position.z = camera.position.z;
+    player.position.x = interactBox.position.x = camera.position.x;
+    player.position.z = interactBox.position.z = camera.position.z;
     playerBB.copy( player.geometry.boundingBox ).applyMatrix4( player.matrixWorld );
+    interactBB.copy( interactBox.geometry.boundingBox ).applyMatrix4( interactBox.matrixWorld );
 
     // Collisions
     boundingBoxes.forEach( (bb) => {
@@ -42,6 +45,20 @@ export function animate() {
         }
     });
 
+    // interactions
+    interactableBBoxes.forEach( (bb) => {
+        if ( interactBB.intersectsBox( bb ) ) {
+            document.querySelector( '#interact-prompt' ).classList.remove( 'hidden' );
+            window.onclick = () => {
+                console.log( bb.action );
+            }
+        }
+        else {
+            document.querySelector( '#interact-prompt' ).classList.add( 'hidden' );
+            window.onclick = false;
+        }
+    });
+
     // Camera coordinates
     if ( debug ) {
         consts.debugInfo.innerHTML = `
@@ -50,11 +67,11 @@ export function animate() {
             <li>CameraY : ${ camera.position.y }</li>
             <li>CameraZ : ${ camera.position.z }</li>
         `;
-        scene.add( helpers.axes, playerHelper );
+        scene.add( helpers.axes, playerHelper, interactHelper );
     }
     else {
         consts.debugInfo.innerHTML = '';
-        scene.remove( helpers.axes, playerHelper );
+        scene.remove( helpers.axes, playerHelper, interactHelper );
     }
 
     // Rotation lente de la skybox pour donner un peu de vie aux nuages
