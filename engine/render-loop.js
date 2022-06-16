@@ -7,7 +7,7 @@ import { consts } from "./consts";
 import { skybox } from "../designer/skybox";
 import { player, playerBB, interactBox, interactBB } from '../designer/player';
 import { boundingBoxes } from '../designer/environment';
-import { interactableBBoxes } from '../designer/interactable';
+import { interactableBBoxes, getInteraction } from '../designer/interactable';
 
 let speed               = 2;
 const playerHelper      = boundingBoxHelper( playerBB, false );
@@ -49,9 +49,7 @@ export function animate() {
     interactableBBoxes.forEach( (bb) => {
         if ( interactBB.intersectsBox( bb ) ) {
             document.querySelector( '#interact-prompt' ).classList.remove( 'hidden' );
-            window.onclick = () => {
-                console.log( bb.action );
-            }
+            window.onclick = () => { getInteraction( bb.action ); }
         }
         else {
             document.querySelector( '#interact-prompt' ).classList.add( 'hidden' );
@@ -88,4 +86,8 @@ function onWindowsResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
+function testFunction() {
+    console.log('reetsets');
 }

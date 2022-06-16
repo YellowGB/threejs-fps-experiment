@@ -7,6 +7,9 @@ let boundingBoxes = [];
 
 export { boundingBoxes };
 
+/**
+ * Définit et place les objets non-interractif constituant l'environnement de la scène
+ */
 export function setEnvironment() {
 
     const floor = new THREE.Mesh(
